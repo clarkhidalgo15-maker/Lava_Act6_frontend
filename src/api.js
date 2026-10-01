@@ -1,4 +1,10 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost/LavaLust-Act6_backend/public/api').replace(/\/$/, '');
+const LOCAL_API_BASE = 'http://localhost/LavaLust-Act6_backend/public/api';
+const PRODUCTION_API_BASE = 'https://hidalgo-lava-act6-backend.onrender.com/api';
+const configuredApiBase = import.meta.env.VITE_API_BASE_URL?.trim() || '';
+const isLocalApiBase = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(?:\/|$)/i.test(configuredApiBase);
+const API_BASE = (configuredApiBase && (!import.meta.env.PROD || !isLocalApiBase)
+  ? configuredApiBase
+  : import.meta.env.DEV ? LOCAL_API_BASE : PRODUCTION_API_BASE).replace(/\/$/, '');
 const SESSION_KEY = 'stockroom-session';
 
 export function readSession() {
